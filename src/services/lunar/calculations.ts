@@ -70,8 +70,8 @@ function refineNewMoonTime(approximateDate: Date): Date {
  * Calcule le jour du mois lunaire (1-30) pour une date donnée
  * 
  * Selon le calendrier Fezan traditionnel :
- * - Le jour de la nouvelle lune astronomique = jour lunaire 30 (fin du cycle)
- * - Le lendemain de la nouvelle lune = jour lunaire 1 (début du nouveau cycle)
+ * - Le jour de la nouvelle lune astronomique = jour lunaire 1 (début du cycle)
+ * - Le cycle dure 30 jours jusqu'à la prochaine nouvelle lune
  */
 export function getLunarDayOfMonth(date: Date): number {
   const newMoon = findPreviousNewMoon(date);
@@ -83,14 +83,9 @@ export function getLunarDayOfMonth(date: Date): number {
   const diffTime = dateNormalized.getTime() - newMoonNormalized.getTime();
   const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
   
-  // Si on est le jour de la nouvelle lune, c'est le jour 30 (fin du cycle précédent)
-  if (diffDays === 0) {
-    return 30;
-  }
-  
-  // Le lendemain de la nouvelle lune = jour 1
-  // diffDays jours après la nouvelle lune = jour diffDays
-  return diffDays;
+  // Le jour de la nouvelle lune = jour 1
+  // diffDays jours après = jour (diffDays + 1)
+  return diffDays + 1;
 }
 
 /**

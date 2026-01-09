@@ -27,7 +27,7 @@ export function DayDetailPanel({ dayInfo, onClose }: DayDetailPanelProps) {
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--color-surface)] rounded-t-3xl 
                       max-h-[85vh] overflow-y-auto animate-slide-up
                       sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2
-                      sm:max-w-md sm:w-full sm:rounded-2xl sm:max-h-[90vh]">
+                      sm:w-full sm:rounded-2xl sm:max-h-[90vh]">
         
         {/* Handle pour mobile */}
         <div className="sm:hidden flex justify-center pt-3 pb-2">

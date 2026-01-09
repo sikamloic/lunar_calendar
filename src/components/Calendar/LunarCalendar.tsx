@@ -54,7 +54,7 @@ export function LunarCalendar() {
   const dayNamesFull = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-6">
+    <div className="mx-auto px-2 sm:px-4">
       <CalendarHeader
         year={year}
         month={month}
@@ -64,11 +64,11 @@ export function LunarCalendar() {
       />
 
       {/* Jours de la semaine */}
-      <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-1">
         {dayNamesFull.map((day, index) => (
           <div
             key={day}
-            className="text-center text-xs sm:text-sm font-semibold text-[var(--color-text-secondary)] py-2"
+            className="text-center text-[10px] sm:text-xs font-medium text-[var(--color-text-secondary)] py-1"
           >
             <span className="sm:hidden">{dayNamesShort[index]}</span>
             <span className="hidden sm:inline">{day}</span>
@@ -77,10 +77,10 @@ export function LunarCalendar() {
       </div>
 
       {/* Grille du calendrier */}
-      <div className="grid grid-cols-7 gap-1 sm:gap-2">
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
         {/* Cellules vides pour l'alignement */}
         {Array.from({ length: startOffset }).map((_, index) => (
-          <div key={`empty-${index}`} className="aspect-square sm:aspect-auto" />
+          <div key={`empty-${index}`} className="aspect-square" />
         ))}
 
         {/* Jours du mois */}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, X, AlertTriangle, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import { Check, X, AlertTriangle, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 import { getAllFezanDays, getAllDirections, getDirectionCssKey } from '../../services/lunar';
 import type { MoonPhase } from '../../services/lunar';
 import { MoonPhaseIcon, getMoonPhaseName } from '../icons';
@@ -16,23 +16,24 @@ export function Legend() {
   const directions = getAllDirections();
 
   return (
-    <div className="bg-[var(--color-surface)] rounded-2xl mt-6 overflow-hidden">
-      {/* Header cliquable */}
+    <div className="mt-4">
+      {/* Toggle Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 sm:p-6 
-                   hover:bg-[var(--color-surface-elevated)] transition-colors touch-manipulation"
+        className="w-full flex items-center justify-between p-2.5
+                   bg-[var(--color-surface)] rounded-lg
+                   hover:bg-[var(--color-surface-elevated)] transition-colors"
       >
-        <div className="flex items-center gap-3">
-          <Info size={20} className="text-[var(--color-accent-primary)]" />
-          <h3 className="text-lg font-bold text-[var(--color-text-primary)]">
-            Guide & Légende
-          </h3>
+        <div className="flex items-center gap-2">
+          <HelpCircle size={14} className="text-[var(--color-text-secondary)]" />
+          <span className="text-xs font-medium text-[var(--color-text-secondary)]">
+            Légende
+          </span>
         </div>
         {isExpanded ? (
-          <ChevronUp size={20} className="text-[var(--color-text-secondary)]" />
+          <ChevronUp size={16} className="text-[var(--color-text-secondary)]" />
         ) : (
-          <ChevronDown size={20} className="text-[var(--color-text-secondary)]" />
+          <ChevronDown size={16} className="text-[var(--color-text-secondary)]" />
         )}
       </button>
 

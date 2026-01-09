@@ -20,44 +20,41 @@ export function CalendarHeader({
   onNextMonth,
   onToday,
 }: CalendarHeaderProps) {
+  const monthName = MONTH_NAMES[month - 1];
+
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-      {/* Navigation */}
-      <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-center sm:justify-start">
+    <div className="flex items-center justify-between gap-2 mb-3 py-2">
+      {/* Navigation gauche */}
+      <button
+        onClick={onPreviousMonth}
+        className="p-2 rounded-full hover:bg-[var(--color-surface)] transition-colors"
+        aria-label="Mois précédent"
+      >
+        <ChevronLeft size={20} className="text-[var(--color-text-secondary)]" />
+      </button>
+
+      {/* Titre du mois */}
+      <h2 className="text-base sm:text-lg font-semibold text-[var(--color-text-primary)]">
+        {monthName} {year}
+      </h2>
+
+      {/* Navigation droite + Aujourd'hui */}
+      <div className="flex items-center gap-1">
         <button
-          onClick={onPreviousMonth}
-          className="p-3 rounded-xl bg-[var(--color-surface)] hover:bg-[var(--color-surface-elevated)] 
-                     active:scale-95 transition-all touch-manipulation"
-          aria-label="Mois précédent"
+          onClick={onToday}
+          className="p-2 rounded-full hover:bg-[var(--color-surface)] transition-colors"
+          aria-label="Aujourd'hui"
         >
-          <ChevronLeft size={20} className="text-[var(--color-text-primary)]" />
+          <CalendarDays size={18} className="text-[var(--color-accent-primary)]" />
         </button>
-        
-        <h2 className="text-lg sm:text-2xl font-bold text-[var(--color-text-primary)] min-w-[180px] sm:min-w-[220px] text-center">
-          {MONTH_NAMES[month - 1]} {year}
-        </h2>
-        
         <button
           onClick={onNextMonth}
-          className="p-3 rounded-xl bg-[var(--color-surface)] hover:bg-[var(--color-surface-elevated)] 
-                     active:scale-95 transition-all touch-manipulation"
+          className="p-2 rounded-full hover:bg-[var(--color-surface)] transition-colors"
           aria-label="Mois suivant"
         >
-          <ChevronRight size={20} className="text-[var(--color-text-primary)]" />
+          <ChevronRight size={20} className="text-[var(--color-text-secondary)]" />
         </button>
       </div>
-
-      {/* Bouton Aujourd'hui */}
-      <button
-        onClick={onToday}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl 
-                   bg-[var(--color-accent-primary)] text-[var(--color-background)] 
-                   font-medium hover:opacity-90 active:scale-95 
-                   transition-all touch-manipulation w-full sm:w-auto justify-center"
-      >
-        <CalendarDays size={18} />
-        <span>Aujourd'hui</span>
-      </button>
     </div>
   );
 }

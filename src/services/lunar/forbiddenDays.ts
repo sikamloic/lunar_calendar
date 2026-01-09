@@ -13,26 +13,70 @@ interface ForbiddenDayRule {
 }
 
 /**
- * Liste des jours interdits fixes de l'année
- * Ces dates sont considérées comme défavorables pour entreprendre des actions importantes
+ * Liste des 45 jours interdits fixes de l'année (tradition Fezan)
+ * Ces dates sont considérées comme défavorables pour entreprendre des actions importantes,
+ * même si le jour Fezan correspondant est favorable.
+ * 
+ * Source: Tradition Fezan du Bénin
  */
 const FORBIDDEN_DAYS: readonly ForbiddenDayRule[] = [
-  // Ces jours sont des exemples basés sur les traditions
-  // La liste exacte peut varier selon les sources et les régions
-  { month: 1, day: 1, reason: 'Premier jour de l\'année' },
-  { month: 1, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 2, day: 29, reason: 'Jour bissextile' },
-  { month: 3, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 4, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 5, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 6, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 7, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 8, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 9, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 10, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 11, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 12, day: 13, reason: 'Jour de malchance traditionnelle' },
-  { month: 12, day: 31, reason: 'Dernier jour de l\'année' },
+  // Janvier (6 jours)
+  { month: 1, day: 1, reason: 'Mauvais jour de janvier' },
+  { month: 1, day: 2, reason: 'Mauvais jour de janvier' },
+  { month: 1, day: 6, reason: 'Mauvais jour de janvier' },
+  { month: 1, day: 11, reason: 'Mauvais jour de janvier' },
+  { month: 1, day: 17, reason: 'Mauvais jour de janvier' },
+  { month: 1, day: 18, reason: 'Mauvais jour de janvier' },
+  // Février (3 jours)
+  { month: 2, day: 8, reason: 'Mauvais jour de février' },
+  { month: 2, day: 16, reason: 'Mauvais jour de février' },
+  { month: 2, day: 17, reason: 'Mauvais jour de février' },
+  // Mars (4 jours)
+  { month: 3, day: 2, reason: 'Mauvais jour de mars' },
+  { month: 3, day: 12, reason: 'Mauvais jour de mars' },
+  { month: 3, day: 13, reason: 'Mauvais jour de mars' },
+  { month: 3, day: 15, reason: 'Mauvais jour de mars' },
+  // Avril (5 jours)
+  { month: 4, day: 1, reason: 'Mauvais jour d\'avril' },
+  { month: 4, day: 3, reason: 'Mauvais jour d\'avril' },
+  { month: 4, day: 15, reason: 'Mauvais jour d\'avril' },
+  { month: 4, day: 17, reason: 'Mauvais jour d\'avril' },
+  { month: 4, day: 18, reason: 'Mauvais jour d\'avril' },
+  // Mai (4 jours)
+  { month: 5, day: 8, reason: 'Mauvais jour de mai' },
+  { month: 5, day: 10, reason: 'Mauvais jour de mai' },
+  { month: 5, day: 17, reason: 'Mauvais jour de mai' },
+  { month: 5, day: 30, reason: 'Mauvais jour de mai' },
+  // Juin (3 jours)
+  { month: 6, day: 1, reason: 'Mauvais jour de juin' },
+  { month: 6, day: 7, reason: 'Mauvais jour de juin' },
+  { month: 6, day: 10, reason: 'Mauvais jour de juin' },
+  // Juillet (3 jours)
+  { month: 7, day: 1, reason: 'Mauvais jour de juillet' },
+  { month: 7, day: 5, reason: 'Mauvais jour de juillet' },
+  { month: 7, day: 6, reason: 'Mauvais jour de juillet' },
+  // Août (4 jours)
+  { month: 8, day: 1, reason: 'Mauvais jour d\'août' },
+  { month: 8, day: 3, reason: 'Mauvais jour d\'août' },
+  { month: 8, day: 18, reason: 'Mauvais jour d\'août' },
+  { month: 8, day: 30, reason: 'Mauvais jour d\'août' },
+  // Septembre (5 jours)
+  { month: 9, day: 1, reason: 'Mauvais jour de septembre' },
+  { month: 9, day: 2, reason: 'Mauvais jour de septembre' },
+  { month: 9, day: 15, reason: 'Mauvais jour de septembre' },
+  { month: 9, day: 18, reason: 'Mauvais jour de septembre' },
+  { month: 9, day: 30, reason: 'Mauvais jour de septembre' },
+  // Octobre (2 jours)
+  { month: 10, day: 15, reason: 'Mauvais jour d\'octobre' },
+  { month: 10, day: 17, reason: 'Mauvais jour d\'octobre' },
+  // Novembre (3 jours)
+  { month: 11, day: 1, reason: 'Mauvais jour de novembre' },
+  { month: 11, day: 7, reason: 'Mauvais jour de novembre' },
+  { month: 11, day: 11, reason: 'Mauvais jour de novembre' },
+  // Décembre (3 jours)
+  { month: 12, day: 1, reason: 'Mauvais jour de décembre' },
+  { month: 12, day: 7, reason: 'Mauvais jour de décembre' },
+  { month: 12, day: 11, reason: 'Mauvais jour de décembre' },
 ] as const;
 
 /**
