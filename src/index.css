@@ -1,0 +1,260 @@
+@import "tailwindcss";
+
+/* ========================================
+   LUNAR CALENDAR - DESIGN SYSTEM
+   ======================================== */
+
+@theme {
+  /* Colors - Dark Mode (default) */
+  --color-background: #0a0a0f;
+  --color-surface: #1a1a2e;
+  --color-surface-elevated: #252540;
+  --color-text-primary: #f0f0f5;
+  --color-text-secondary: #a0a0b0;
+  --color-accent-primary: #d4a853;
+  --color-accent-secondary: #8b5cf6;
+  --color-favorable: #10b981;
+  --color-unfavorable: #ef4444;
+  --color-neutral: #64748b;
+
+  /* Direction Colors */
+  --color-dir-north: #38bdf8;
+  --color-dir-north-east: #22d3d1;
+  --color-dir-east: #fb923c;
+  --color-dir-south-east: #f472b6;
+  --color-dir-south: #f87171;
+  --color-dir-south-west: #a78bfa;
+  --color-dir-west: #818cf8;
+  --color-dir-north-west: #4ade80;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(212, 168, 83, 0.3);
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Light Mode Overrides */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-background: #faf9f7;
+    --color-surface: #f0efe8;
+    --color-surface-elevated: #ffffff;
+    --color-text-primary: #1a1a2e;
+    --color-text-secondary: #4a4a5a;
+    --color-accent-primary: #b8860b;
+    --color-accent-secondary: #7c3aed;
+    --color-favorable: #059669;
+    --color-unfavorable: #dc2626;
+    --color-neutral: #475569;
+
+    /* Direction Colors - Light */
+    --color-dir-north: #0284c7;
+    --color-dir-north-east: #0891b2;
+    --color-dir-east: #ea580c;
+    --color-dir-south-east: #db2777;
+    --color-dir-south: #dc2626;
+    --color-dir-south-west: #7c3aed;
+    --color-dir-west: #4f46e5;
+    --color-dir-north-west: #16a34a;
+
+    /* Shadows - Light */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-glow: 0 0 20px rgba(184, 134, 11, 0.2);
+  }
+}
+
+/* Manual Theme Toggle Support */
+[data-theme="light"] {
+  --color-background: #faf9f7;
+  --color-surface: #f0efe8;
+  --color-surface-elevated: #ffffff;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #4a4a5a;
+  --color-accent-primary: #b8860b;
+  --color-accent-secondary: #7c3aed;
+  --color-favorable: #059669;
+  --color-unfavorable: #dc2626;
+  --color-neutral: #475569;
+  --color-dir-north: #0284c7;
+  --color-dir-north-east: #0891b2;
+  --color-dir-east: #ea580c;
+  --color-dir-south-east: #db2777;
+  --color-dir-south: #dc2626;
+  --color-dir-south-west: #7c3aed;
+  --color-dir-west: #4f46e5;
+  --color-dir-north-west: #16a34a;
+  --color-dir-neutral: #94a3b8;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(184, 134, 11, 0.2);
+}
+
+[data-theme="dark"] {
+  --color-background: #0a0a0f;
+  --color-surface: #1a1a2e;
+  --color-surface-elevated: #252540;
+  --color-text-primary: #f0f0f5;
+  --color-text-secondary: #a0a0b0;
+  --color-accent-primary: #d4a853;
+  --color-accent-secondary: #8b5cf6;
+  --color-favorable: #10b981;
+  --color-unfavorable: #ef4444;
+  --color-neutral: #64748b;
+  --color-dir-north: #38bdf8;
+  --color-dir-north-east: #22d3d1;
+  --color-dir-east: #fb923c;
+  --color-dir-south-east: #f472b6;
+  --color-dir-south: #f87171;
+  --color-dir-south-west: #a78bfa;
+  --color-dir-west: #818cf8;
+  --color-dir-north-west: #4ade80;
+  --color-dir-neutral: #64748b;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(212, 168, 83, 0.3);
+}
+
+/* Base Styles */
+html {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Utility Classes for Fezan Days */
+.day-favorable {
+  background-color: color-mix(in srgb, var(--color-favorable) 15%, transparent);
+  border-left: 3px solid var(--color-favorable);
+}
+
+.day-unfavorable {
+  background-color: color-mix(in srgb, var(--color-unfavorable) 15%, transparent);
+  border-left: 3px solid var(--color-unfavorable);
+}
+
+.day-forbidden {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 5px,
+    color-mix(in srgb, var(--color-unfavorable) 10%, transparent) 5px,
+    color-mix(in srgb, var(--color-unfavorable) 10%, transparent) 10px
+  );
+}
+
+/* Moon Phase Animation */
+@keyframes moon-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--color-accent-primary);
+  }
+  50% {
+    box-shadow: 0 0 25px var(--color-accent-primary);
+  }
+}
+
+.moon-new {
+  animation: moon-glow 2s ease-in-out infinite;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-secondary);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-primary);
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from { 
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.2s ease-out forwards;
+}
+
+/* Touch optimizations */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area for mobile */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
