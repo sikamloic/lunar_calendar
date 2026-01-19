@@ -80,6 +80,13 @@ const FORBIDDEN_DAYS: readonly ForbiddenDayRule[] = [
 ] as const;
 
 /**
+ * Optimized Set for O(1) lookup of forbidden days
+ */
+const FORBIDDEN_DAYS_SET = new Set<string>(
+  FORBIDDEN_DAYS.map(rule => `${rule.month}-${rule.day}`)
+);
+
+/**
  * Vérifie si une date est un jour interdit
  * @param date - La date à vérifier
  * @returns true si c'est un jour interdit
@@ -87,10 +94,9 @@ const FORBIDDEN_DAYS: readonly ForbiddenDayRule[] = [
 export function isForbiddenDay(date: Date): boolean {
   const month = date.getMonth() + 1;
   const day = date.getDate();
+  const key = `${month}-${day}`;
   
-  return FORBIDDEN_DAYS.some(
-    (rule) => rule.month === month && rule.day === day
-  );
+  return FORBIDDEN_DAYS_SET.has(key);
 }
 
 /**

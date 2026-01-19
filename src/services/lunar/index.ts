@@ -30,7 +30,6 @@ export {
 
 // Calculations
 export {
-  findPreviousNewMoon,
   getLunarDayOfMonth,
   getMoonPhase,
   isNewMoon,
@@ -39,6 +38,35 @@ export {
   getMonthLunarInfo,
   getYearLunarInfo,
 } from './calculations';
+
+// Astronomy
+export {
+  findPreviousNewMoon,
+  findNextNewMoon,
+  getNewMoonsForYear,
+} from './astronomy';
+
+// Errors
+export {
+  LunarCalculationError,
+  DateValidationError,
+  CacheError,
+} from './errors';
+
+// Validation
+export {
+  validateDate,
+  validateYear,
+  validateMonth,
+  createValidDate,
+} from './validation';
+
+// Cache
+export {
+  LRUCache,
+  lunarDayCache,
+  dateToKey,
+} from './cache';
 
 // Forbidden Days
 export {

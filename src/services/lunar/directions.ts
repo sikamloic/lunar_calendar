@@ -2,42 +2,44 @@ import type { CardinalDirection } from './types';
 
 /**
  * Les directions cardinales selon le cycle lunaire traditionnel Fezan
- * Basé sur le calendrier de référence manuscrit (Décembre 2025 - Janvier 2026)
+ * Basé sur le calendrier de référence manuscrit (Décembre 2024 - Janvier 2025)
  * 
  * Le cycle complet est de 30 jours (un mois lunaire)
  * Le jour 7 n'a pas de direction (jour de transition/repos)
+ * 
+ * Référence: Document manuscrit Fezan traditionnel du Bénin
  */
 const DIRECTIONS_30_DAYS: readonly (CardinalDirection | null)[] = [
-  'Sud',        // Jour 1
-  'Nord-Ouest', // Jour 2
-  'Est',        // Jour 3
-  'Nord',       // Jour 4
-  'Nord-Est',   // Jour 5
-  'Est',        // Jour 6
-  null,         // Jour 7 (pas de direction - jour de repos)
-  'Ouest',      // Jour 8
-  'Sud',        // Jour 9
-  'Nord-Ouest', // Jour 10
-  'Ouest',      // Jour 11
-  'Nord',       // Jour 12
-  'Nord',       // Jour 13
-  'Sud-Est',    // Jour 14
-  'Nord-Est',   // Jour 15
-  'Sud',        // Jour 16
-  'Nord-Ouest', // Jour 17
-  'Sud-Ouest',  // Jour 18
-  'Ouest',      // Jour 19
-  'Nord',       // Jour 20
-  'Est',        // Jour 21
-  'Sud-Est',    // Jour 22
-  'Nord-Est',   // Jour 23
-  'Sud',        // Jour 24
-  'Ouest',      // Jour 25
-  'Sud-Ouest',  // Jour 26
-  'Nord-Ouest', // Jour 27
-  'Est',        // Jour 28
-  'Sud-Est',    // Jour 29
-  'Nord-Est',   // Jour 30
+  'Sud',        // Jour 1  - Référence: 20 déc = Sud
+  'Nord-Ouest', // Jour 2  - Référence: 21 déc = Nord-ouest
+  'Est',        // Jour 3  - Référence: 22 déc = Est
+  'Nord',       // Jour 4  - Référence: 23 déc = Nord
+  'Nord-Est',   // Jour 5  - Référence: 24 déc = Nord-est
+  'Est',        // Jour 6  - Référence: 25 déc = Est
+  null,         // Jour 7  - Référence: 26 déc = (rien) - jour de repos
+  'Ouest',      // Jour 8  - Référence: 27 déc = Ouest
+  'Sud',        // Jour 9  - Référence: 28 déc = Sud
+  'Nord-Ouest', // Jour 10 - Référence: 29 déc = Nord-ouest
+  'Ouest',      // Jour 11 - Référence: 30 déc = Ouest
+  'Nord',       // Jour 12 - Référence: 31 déc = Nord
+  'Nord',       // Jour 13 - Référence: 1 jan = Nord
+  'Sud-Est',    // Jour 14 - Référence: 2 jan = Sud-est
+  'Nord-Est',   // Jour 15 - Référence: 3 jan = Nord-est
+  'Sud',        // Jour 16 - Référence: 4 jan = Sud
+  'Nord-Ouest', // Jour 17 - Référence: 5 jan = Nord-ouest
+  'Sud-Ouest',  // Jour 18 - Référence: 6 jan = Sud-ouest
+  'Ouest',      // Jour 19 - Référence: 7 jan = Ouest
+  'Nord',       // Jour 20 - Référence: 8 jan = Nord
+  'Est',        // Jour 21 - Référence: 9 jan = Est
+  'Sud-Est',    // Jour 22 - Référence: 10 jan = Sud-est
+  'Nord-Est',   // Jour 23 - Référence: 11 jan = Nord-est
+  'Sud',        // Jour 24 - Référence: 12 jan = Sud
+  'Ouest',      // Jour 25 - Référence: 13 jan = Ouest
+  'Sud-Ouest',  // Jour 26 - Référence: 14 jan = Sud-ouest
+  'Nord-Ouest', // Jour 27 - Référence: 15 jan = Nord-ouest
+  'Est',        // Jour 28 - Référence: 16 jan = Est
+  'Sud-Est',    // Jour 29 - Référence: 17 jan = Sud-est
+  'Nord-Est',   // Jour 30 - Référence: 18 jan = Nord-est (nouvelle lune 19h43)
 ] as const;
 
 /**

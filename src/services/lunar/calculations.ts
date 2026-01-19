@@ -3,6 +3,10 @@ import type { MoonPhase, LunarDayInfo } from './types';
 import { getFezanDay } from './fezan';
 import { getDirection } from './directions';
 import { isForbiddenDay } from './forbiddenDays';
+import { findPreviousNewMoon } from './astronomy';
+import { validateDate, validateYear, validateMonth } from './validation';
+import { lunarDayCache, dateToKey } from './cache';
+import { LunarCalculationError } from './errors';
 
 /**
  * Jours de la semaine en français
@@ -18,74 +22,66 @@ const DAYS_OF_WEEK = [
 ] as const;
 
 /**
- * Trouve la nouvelle lune la plus proche avant ou égale à une date donnée
+ * Note: findPreviousNewMoon is now imported from './astronomy'
+ * Uses Meeus algorithm for high precision (~2 minutes accuracy)
  */
-export function findPreviousNewMoon(date: Date): Date {
-  let searchDate = new Date(date);
-  
-  // Reculer jusqu'à 35 jours pour trouver la nouvelle lune précédente
-  for (let i = 0; i < 35; i++) {
-    const illumination = SunCalc.getMoonIllumination(searchDate);
-    
-    // Nouvelle lune quand phase ≈ 0 (ou très proche de 1, car c'est cyclique)
-    if (illumination.phase < 0.02 || illumination.phase > 0.98) {
-      // Affiner la recherche pour trouver le moment exact
-      return refineNewMoonTime(searchDate);
-    }
-    
-    searchDate.setDate(searchDate.getDate() - 1);
-  }
-  
-  // Fallback: retourner la date de recherche
-  return searchDate;
-}
 
 /**
- * Affine le moment exact de la nouvelle lune
+ * Date de référence connue du calendrier Fezan traditionnel
+ * Source: Document manuscrit Fezan (Déc 2025 - Jan 2026)
+ * 
+ * Le 20 décembre 2025 = Jour lunaire 1 (Mêdjo) à 2H43
+ * Cette date sert de point d'ancrage pour calculer tous les autres jours.
  */
-function refineNewMoonTime(approximateDate: Date): Date {
-  let bestDate = new Date(approximateDate);
-  let minPhase = 1;
-  
-  // Chercher heure par heure sur 48h autour de la date approximative
-  const startTime = approximateDate.getTime() - 24 * 60 * 60 * 1000;
-  
-  for (let h = 0; h < 48; h++) {
-    const checkDate = new Date(startTime + h * 60 * 60 * 1000);
-    const illumination = SunCalc.getMoonIllumination(checkDate);
-    
-    // La phase est entre 0 et 1, nouvelle lune à 0
-    const phaseDistance = Math.min(illumination.phase, 1 - illumination.phase);
-    
-    if (phaseDistance < minPhase) {
-      minPhase = phaseDistance;
-      bestDate = checkDate;
-    }
-  }
-  
-  return bestDate;
-}
+const FEZAN_REFERENCE_DATE = new Date(2025, 11, 20); // 20 décembre 2025
+const FEZAN_REFERENCE_LUNAR_DAY = 1;
+const LUNAR_CYCLE_LENGTH = 30;
 
 /**
  * Calcule le jour du mois lunaire (1-30) pour une date donnée
  * 
- * Selon le calendrier Fezan traditionnel :
- * - Le jour de la nouvelle lune astronomique = jour lunaire 1 (début du cycle)
- * - Le cycle dure 30 jours jusqu'à la prochaine nouvelle lune
+ * Méthode: Utilise une date de référence connue du calendrier Fezan traditionnel
+ * et calcule le décalage en jours, puis applique le cycle de 30 jours.
+ * 
+ * Référence: Document manuscrit Fezan (Déc 2025 - Jan 2026)
+ * - 20 décembre 2025 = jour 1 (Mêdjo) à 2H43
+ * - 21 décembre 2025 = jour 2 (Mêkou)
+ * - ...
+ * - 18 janvier 2026 = jour 30 (nouvelle lune 19H43)
+ * - 19 janvier 2026 = jour 1 (Mêdjo) - nouveau cycle
  */
 export function getLunarDayOfMonth(date: Date): number {
-  const newMoon = findPreviousNewMoon(date);
+  validateDate(date);
   
-  // Normaliser les dates à minuit pour comparer les jours
-  const dateNormalized = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const newMoonNormalized = new Date(newMoon.getFullYear(), newMoon.getMonth(), newMoon.getDate());
-  
-  const diffTime = dateNormalized.getTime() - newMoonNormalized.getTime();
-  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-  
-  // Le jour de la nouvelle lune = jour 1
-  // diffDays jours après = jour (diffDays + 1)
-  return diffDays + 1;
+  try {
+    // Normaliser les dates à minuit pour comparer les jours
+    const dateNormalized = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const refNormalized = new Date(FEZAN_REFERENCE_DATE.getFullYear(), FEZAN_REFERENCE_DATE.getMonth(), FEZAN_REFERENCE_DATE.getDate());
+    
+    // Calculer le nombre de jours depuis la date de référence
+    const diffTime = dateNormalized.getTime() - refNormalized.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Calculer le jour lunaire en utilisant le cycle de 30 jours
+    // La référence est jour 1, donc on ajoute diffDays et on applique modulo 30
+    let lunarDay = ((FEZAN_REFERENCE_LUNAR_DAY - 1 + diffDays) % LUNAR_CYCLE_LENGTH) + 1;
+    
+    // Gérer les nombres négatifs (dates avant la référence)
+    if (lunarDay <= 0) {
+      lunarDay += LUNAR_CYCLE_LENGTH;
+    }
+    
+    return lunarDay;
+  } catch (error) {
+    if (error instanceof LunarCalculationError) {
+      throw error;
+    }
+    throw new LunarCalculationError(
+      'Failed to calculate lunar day of month',
+      date,
+      error
+    );
+  }
 }
 
 /**
@@ -139,62 +135,101 @@ function formatTime(date: Date): string {
 
 /**
  * Calcule toutes les informations lunaires pour une date donnée
+ * Uses cache for performance optimization
  */
 export function getLunarDayInfo(date: Date): LunarDayInfo {
-  const lunarDay = getLunarDayOfMonth(date);
-  const fezan = getFezanDay(lunarDay);
-  const direction = getDirection(lunarDay);
-  const moonPhase = getMoonPhase(date);
-  const newMoonCheck = isNewMoon(date);
-  const fullMoonCheck = isFullMoon(date);
+  validateDate(date);
   
-  let newMoonTime: string | undefined;
-  if (newMoonCheck) {
-    const exactNewMoon = findPreviousNewMoon(date);
-    newMoonTime = formatTime(exactNewMoon);
-  }
+  const cacheKey = dateToKey(date);
   
-  return {
-    date: new Date(date),
-    gregorianDay: date.getDate(),
-    gregorianMonth: date.getMonth() + 1,
-    gregorianYear: date.getFullYear(),
-    dayOfWeek: DAYS_OF_WEEK[date.getDay()],
-    lunarDay,
-    fezan,
-    direction,
-    moonPhase,
-    isNewMoon: newMoonCheck,
-    isFullMoon: fullMoonCheck,
-    isForbiddenDay: isForbiddenDay(date),
-    newMoonTime,
-  };
+  return lunarDayCache.getOrCompute(cacheKey, () => {
+    try {
+      const lunarDay = getLunarDayOfMonth(date);
+      const fezan = getFezanDay(lunarDay);
+      const direction = getDirection(lunarDay);
+      const moonPhase = getMoonPhase(date);
+      const newMoonCheck = isNewMoon(date);
+      const fullMoonCheck = isFullMoon(date);
+      
+      let newMoonTime: string | undefined;
+      if (newMoonCheck) {
+        const exactNewMoon = findPreviousNewMoon(date);
+        newMoonTime = formatTime(exactNewMoon);
+      }
+      
+      return {
+        date: new Date(date),
+        gregorianDay: date.getDate(),
+        gregorianMonth: date.getMonth() + 1,
+        gregorianYear: date.getFullYear(),
+        dayOfWeek: DAYS_OF_WEEK[date.getDay()],
+        lunarDay,
+        fezan,
+        direction,
+        moonPhase,
+        isNewMoon: newMoonCheck,
+        isFullMoon: fullMoonCheck,
+        isForbiddenDay: isForbiddenDay(date),
+        newMoonTime,
+      };
+    } catch (error) {
+      if (error instanceof LunarCalculationError) {
+        throw error;
+      }
+      throw new LunarCalculationError(
+        'Failed to calculate lunar day info',
+        date,
+        error
+      );
+    }
+  });
 }
 
 /**
  * Génère les informations lunaires pour un mois entier
  */
 export function getMonthLunarInfo(year: number, month: number): LunarDayInfo[] {
-  const result: LunarDayInfo[] = [];
-  const daysInMonth = new Date(year, month, 0).getDate();
+  validateYear(year);
+  validateMonth(month);
   
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month - 1, day, 12, 0, 0);
-    result.push(getLunarDayInfo(date));
+  try {
+    const result: LunarDayInfo[] = [];
+    const daysInMonth = new Date(year, month, 0).getDate();
+    
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month - 1, day, 12, 0, 0);
+      result.push(getLunarDayInfo(date));
+    }
+    
+    return result;
+  } catch (error) {
+    throw new LunarCalculationError(
+      `Failed to calculate lunar info for ${year}-${month}`,
+      new Date(year, month - 1, 1),
+      error
+    );
   }
-  
-  return result;
 }
 
 /**
  * Génère les informations lunaires pour une année entière
  */
 export function getYearLunarInfo(year: number): LunarDayInfo[][] {
-  const result: LunarDayInfo[][] = [];
+  validateYear(year);
   
-  for (let month = 1; month <= 12; month++) {
-    result.push(getMonthLunarInfo(year, month));
+  try {
+    const result: LunarDayInfo[][] = [];
+    
+    for (let month = 1; month <= 12; month++) {
+      result.push(getMonthLunarInfo(year, month));
+    }
+    
+    return result;
+  } catch (error) {
+    throw new LunarCalculationError(
+      `Failed to calculate lunar info for year ${year}`,
+      new Date(year, 0, 1),
+      error
+    );
   }
-  
-  return result;
 }

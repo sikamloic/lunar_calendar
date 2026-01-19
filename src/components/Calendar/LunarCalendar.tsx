@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useMonthLunarInfo, useCalendarNavigation } from '../../hooks';
 import type { LunarDayInfo } from '../../services/lunar';
 import { CalendarHeader } from './CalendarHeader';
@@ -44,6 +44,41 @@ export function LunarCalendar() {
     setSelectedDay(null);
   }, []);
 
+  // Keyboard shortcuts for navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle if no modal is open and not typing in input
+      if (selectedDay || e.target instanceof HTMLInputElement) {
+        return;
+      }
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          handlePreviousMonth();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          handleNextMonth();
+          break;
+        case 'Home':
+          e.preventDefault();
+          handleToday();
+          break;
+        case 't':
+        case 'T':
+          if (!e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
+            handleToday();
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handlePreviousMonth, handleNextMonth, handleToday, selectedDay]);
+
   // Calculer le premier jour du mois pour l'alignement de la grille
   const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
   // Ajuster pour commencer par Lundi (0 = Lundi, 6 = Dimanche)
@@ -53,8 +88,25 @@ export function LunarCalendar() {
   const dayNamesShort = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
   const dayNamesFull = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
+  // Month name for accessibility
+  const monthNames = [
+    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+  ];
+  const currentMonthName = monthNames[month - 1];
+
   return (
     <div className="mx-auto px-2 sm:px-4">
+      {/* Screen reader announcement for month changes */}
+      <div 
+        role="status" 
+        aria-live="polite" 
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {currentMonthName} {year}
+      </div>
+
       <CalendarHeader
         year={year}
         month={month}
@@ -64,7 +116,11 @@ export function LunarCalendar() {
       />
 
       {/* Jours de la semaine */}
-      <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-1">
+      <div 
+        className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-1"
+        role="row"
+        aria-label="Jours de la semaine"
+      >
         {dayNamesFull.map((day, index) => (
           <div
             key={day}
@@ -77,7 +133,11 @@ export function LunarCalendar() {
       </div>
 
       {/* Grille du calendrier */}
-      <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
+      <div 
+        className="grid grid-cols-7 gap-0.5 sm:gap-1"
+        role="grid"
+        aria-label={`Calendrier lunaire pour ${currentMonthName} ${year}`}
+      >
         {/* Cellules vides pour l'alignement */}
         {Array.from({ length: startOffset }).map((_, index) => (
           <div key={`empty-${index}`} className="aspect-square" />
