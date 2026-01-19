@@ -75,3 +75,10 @@ export {
   getAllForbiddenDays,
   addCustomForbiddenDays,
 } from './forbiddenDays';
+
+// No Action Days ("Ne rien")
+export {
+  isNoActionDay,
+  getNoActionLunarDays,
+  getNoActionDaysCount,
+} from './noActionDays';

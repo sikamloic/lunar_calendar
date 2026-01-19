@@ -156,7 +156,7 @@ export function DayDetailPanel({ dayInfo, onClose }: DayDetailPanelProps) {
           </div>
 
           {/* Alertes */}
-          {(dayInfo.isNewMoon || dayInfo.isFullMoon || dayInfo.isForbiddenDay) && (
+          {(dayInfo.isNewMoon || dayInfo.isFullMoon || dayInfo.isForbiddenDay || dayInfo.isNoActionDay) && (
             <div className="space-y-2">
               {dayInfo.isNewMoon && (
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--color-surface-elevated)]">
@@ -179,6 +179,14 @@ export function DayDetailPanel({ dayInfo, onClose }: DayDetailPanelProps) {
                   <AlertTriangle size={18} className="text-[var(--color-unfavorable)]" />
                   <span className="text-sm text-[var(--color-unfavorable)]">
                     Jour interdit - Ne rien entreprendre d'important
+                  </span>
+                </div>
+              )}
+              {dayInfo.isNoActionDay && !dayInfo.isForbiddenDay && (
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--color-unfavorable)]/10">
+                  <AlertTriangle size={18} className="text-[var(--color-unfavorable)]" />
+                  <span className="text-sm text-[var(--color-unfavorable)]">
+                    Ne rien entreprendre ce jour
                   </span>
                 </div>
               )}

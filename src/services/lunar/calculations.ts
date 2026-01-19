@@ -3,6 +3,7 @@ import type { MoonPhase, LunarDayInfo } from './types';
 import { getFezanDay } from './fezan';
 import { getDirection } from './directions';
 import { isForbiddenDay } from './forbiddenDays';
+import { isNoActionDay } from './noActionDays';
 import { findPreviousNewMoon } from './astronomy';
 import { validateDate, validateYear, validateMonth } from './validation';
 import { lunarDayCache, dateToKey } from './cache';
@@ -170,6 +171,7 @@ export function getLunarDayInfo(date: Date): LunarDayInfo {
         isNewMoon: newMoonCheck,
         isFullMoon: fullMoonCheck,
         isForbiddenDay: isForbiddenDay(date),
+        isNoActionDay: isNoActionDay(lunarDay),
         newMoonTime,
       };
     } catch (error) {

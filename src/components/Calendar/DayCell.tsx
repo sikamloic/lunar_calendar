@@ -64,7 +64,7 @@ export function DayCell({ dayInfo, isToday = false, onSelect }: DayCellProps) {
       </div>
 
       {/* Badges spéciaux */}
-      {dayInfo.isForbiddenDay && (
+      {(dayInfo.isForbiddenDay || dayInfo.isNoActionDay) && (
         <div className="absolute bottom-1 right-1">
           <AlertTriangle size={10} className="text-[var(--color-unfavorable)]" />
         </div>

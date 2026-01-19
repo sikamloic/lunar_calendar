@@ -62,6 +62,7 @@ export interface LunarDayInfo {
   isNewMoon: boolean;
   isFullMoon: boolean;
   isForbiddenDay: boolean;
+  isNoActionDay: boolean; // "Ne rien" - jour où il ne faut rien entreprendre
   newMoonTime?: string; // Heure de la nouvelle lune si applicable
 }
 
